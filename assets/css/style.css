@@ -1,0 +1,331 @@
+/*Header elements===============================*/
+
+
+#header {
+	padding-left: 20px;
+
+}
+
+.navbar {
+	background-color: #589442;
+	min-height: 70px;
+}
+
+.navbar-center
+{
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+
+/*map elements==================================*/
+
+
+#map {
+	width: 100%;
+	height: 800px;
+	border: 1px solid grey;
+	margin-bottom: 20px;
+}
+
+
+/*search bar elements==================================*/
+.navbar-center {
+	width: 80%;
+}
+
+.panel-default {
+	margin-bottom: 5px;
+}
+
+.panel-body {
+	background-color: #fc0;
+}
+
+#page-form-group {
+	width: 80%;
+}
+
+#page-location-input {
+	width: 100%;
+}
+
+#errorCode {
+    font-weight: bolder;
+}
+
+#form-error-msg {
+	margin-top: 2px;
+    text-align: left;
+    padding-left: 5%;
+    font-size: 12px;
+	color: red;
+}
+
+
+.btn {
+    background-color: #c4204b;
+    color: #fff;
+    border-color: #b12747 #8f1f39 #8f1f39;
+}
+
+.btn:hover { 
+    background-color: #df3864; 
+    color: #fff;
+}
+
+.btn:active { 
+    background-color: black; 
+    color: #fff;
+}
+
+/*main content elements==================================*/
+
+#search-title {
+
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.search-results {
+	
+	background-color: lightgrey;
+	padding: 15px 25px;
+}
+
+.result-card {
+	width: 100%;
+	min-height: 175px;
+	border: 1px solid #AAB2BA;
+	margin-bottom: 15px;
+	background-color: white;
+	padding: 4px;
+	border-radius: 5px;
+}
+
+.thumbnail {
+	max-height: 110px;
+	max-width: 110px;
+}
+
+span.stars, span.stars span {
+    display: block;
+    background: url(../images/stars.png) 0 -16px repeat-x;
+    width: 80px;
+    height: 16px;
+}
+
+span.stars span {
+    background-position: 0 0;
+}
+
+#nameh4 {
+	border-bottom: 1px solid #CACFD2;
+	padding-bottom: 4px;
+}
+
+/* The Modal (background) ============================*/
+.modal {
+    display: block;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 10%; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 60%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.modal-body {
+	padding: 2px 16px;
+	height: 300px;
+	background-color: white;
+}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+#modal-search-panel {
+	height: 220px;
+	padding-top: 25px;
+}
+
+#find {
+	font-weight: bold;
+}
+
+#near {
+	font-weight: bold;
+}
+
+#modal-near-input {
+	width: 90%;
+}
+
+#modal-find-input {
+	width: 90%;
+	margin-bottom: 20px;
+}
+
+#modal-navbar-center {
+	width: 100%;
+}
+
+#modal-form-group {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+
+#modal-find-error-msg {
+	margin-top: 2px;
+    text-align: left;
+    padding-left: 5%;
+    font-size: 12px;
+	color: red;
+}
+
+#modal-near-error-msg {
+	margin-top: 2px;
+	margin-bottom: 1px;
+    text-align: left;
+    padding-left: 5%;
+    font-size: 12px;
+	color: red;
+}
+
+#modal-search-col {
+	text-align: center;
+}
+
+
+
+@media screen and (max-width: 1199px) and (min-width: 992px) {
+	
+    #page-nav-form {
+    	margin: 0px 0px 0px 0px;
+    	width: 100%;
+    	display: inline-block;
+    }
+
+    #page-form-group {
+        display: inline-block;
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 1000px) and (min-width: 200px) {
+	
+	.modal-content {
+		width: 90%;
+		height: 400px;
+	}
+
+	#modal-header-col {
+		padding-right: 0px;
+		padding-left: 0px;
+	}
+}
+
+
+@media screen and (max-width: 768px) and (min-width: 200px) {
+    #page-form-group {
+        display: inline-block;
+        
+    }
+
+	#modal-navbar-center {
+		margin-left: 5%;
+	}    
+	
+	#modal-find-error-msg {
+	
+    padding-left: 0;
+	}
+
+	#modal-near-error-msg {
+    padding-left: 0;
+	}
+
+@media screen and (max-width: 598px) and (min-width: 200px) {
+    #page-form-group {
+        display: inline-block;
+        width: 100%;
+    }
+    #page-nav-form {
+    	margin: 0px 0px 0px px;
+    	width: 100%;
+    }
+    #page-search-button {
+    	width: 50%;
+    }
+
+    #modalh2 {
+    	font-size: 20px;
+    }
+
+    #modal-find-error-msg {
+    	padding-left: 0px;
+    }
+
+    #modal-near-error-msg {
+    	padding-left: 0px;
+    }
+}
