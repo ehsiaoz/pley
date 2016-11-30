@@ -82,7 +82,7 @@ function modalsearchclick() {
 
 		var testFind = $('#modal-find-input').val().trim();
 		var testNear = $('#modal-near-input').val().trim();
-		var letters = /^[a-z0-9]+$/i;
+		var letters = /^[a-z0-9 ]+$/i;
 
 		$('#modal-find-error-msg').html("");
 		$('#modal-near-error-msg').html("");
@@ -168,7 +168,7 @@ function modalsearchclick() {
 function pagesearchclick() {
 
 	$('#form-error-msg').html("");
-	var letters = /^[a-z0-9]+$/i;
+	var letters = /^[a-z0-9_ ]+$/i;
 
 	//Input validation
 	if ($('#modal-find-input').val().trim() === "" || $('#page-location-input').val().trim() === "") {
