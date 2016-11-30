@@ -400,7 +400,7 @@ function addressLookup(lat, long) {
 		console.log("this is latlng in addressLookup: " + latlng);
 		var queryURL = "https:/maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng 
 						 + "&key=AIzaSyBbmAefrpT0YSqgufXAyKg8Stl1CmxqZpI";
-
+		console.log("query url: " + queryURL);
 		$.ajax({
 				url: queryURL, 
 				method: 'GET'
