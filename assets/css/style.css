@@ -29,7 +29,26 @@
 	margin-bottom: 20px;
 }
 
+/*recent search elements==================================*/
 
+.searches {
+    background-color: #fc0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+    float: left;
+    color: #336dea;
+    cursor: pointer;
+    min-width: 75px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #AAB2BA;
+    border-radius: 3px;
+}
+
+.searches:hover { 
+    background-color: #ffc309;
+}
 /*search bar elements==================================*/
 .navbar-center {
 	width: 80%;
@@ -76,7 +95,12 @@
 }
 
 .btn:active { 
-    background-color: black; 
+    background-color: #c4204b; 
+    color: #fff;
+}
+
+.btn:focus { 
+    background-color: #c4204b; 
     color: #fff;
 }
 

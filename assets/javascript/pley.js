@@ -6,7 +6,39 @@ var searchTerm = "";
 var queryLocationGeo = {};
 var displayAddress = " ";
 var numResults = "";
+var recentSearches = [];
 
+
+ // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC57gXB05vm69o1fDvmIrEYWv63bxMRJkg",
+    authDomain: "myfirstfirebase-67548.firebaseapp.com",
+    databaseURL: "https://myfirstfirebase-67548.firebaseio.com",
+    storageBucket: "myfirstfirebase-67548.appspot.com",
+    messagingSenderId: "320034612202"
+  };
+
+  firebase.initializeApp(config);
+
+  var db = firebase.database();
+
+ //Listening for changes in 'searches' node in firebase
+  db.ref('searches').on('value', function(snapshot) {
+  		$('#recent-searches').empty();
+  		recentSearches = [];
+
+  		//loop through array returned by firebase
+  		snapshot.forEach(function(childSnapshot) {
+  			//creating an array with the search saved search terms from firebase
+  			recentSearches.push(childSnapshot.val());
+  		});
+  		//loop through the array and append search term to Recent Searches div.
+  		recentSearches.forEach(function(item, i) {
+  			var eachSearch = "<div class=\"searches\">" + recentSearches[i] + "</div>";
+  			$('#recent-searches').append(eachSearch);
+  		}); 			
+
+  });
 
 //Functions========================================================================================
 
@@ -31,6 +63,16 @@ $('#page-search-button').on('click', pagesearchclick);
 
 //Search Button in modal
 $('#search-button-modal').on('click', modalsearchclick);
+
+//Add click event to recent searches
+$(document).on('click', '.searches', function(){
+ 	newsearch = $(this).text();
+ 	console.log("newsearch: " + newsearch);
+	$('#search-results').empty();
+	$('#search-area').empty();
+	locationsGeo = [];
+	yelpSearch(newsearch, searchLocation);
+});
 
 
 //Forms==============================
@@ -118,16 +160,43 @@ function modalsearchclick() {
 
 		else {
 
-		$('#search-results').empty();
-		locationsGeo = [];
-		modal.style.display = "none";
+			$('#search-results').empty();
+			locationsGeo = [];
+			modal.style.display = "none";
 
-		searchTerm = $('#modal-find-input').val().trim();
-		searchLocation = $('#modal-near-input').val().trim(); 
-		var searchLatitude = searchLongitude = '';
+			searchTerm = $('#modal-find-input').val().toLowerCase().trim();
+			
+			// recentSearches.push(searchTerm);
+			// db.ref('searches').push(searchTerm);
+			searchLocation = $('#modal-near-input').val().trim(); 
+			var searchLatitude = searchLongitude = '';
+			console.log("Recent Searches: ", recentSearches);
+		
+			db.ref('searches').on('value', function(snapshot) {
+				var tempSearchArr = [];
+		  		snapshot.forEach(function(childSnapshot) {
 
+	  				tempSearchArr.push(childSnapshot.val());
+	  			});
+				
+				if (tempSearchArr.includes(searchTerm) === false) {
+					db.ref('searches').push(searchTerm);
+				}
+
+				else {
+
+					return;
+				}
+	  			
+		  	});
+
+			yelpSearch(searchTerm, searchLocation);
 		}
 
+		
+
+
+		//Pseudo Code to use google location detection======================
 		// if(searchTerm == ''){
 		// 	console.log("No search term entered..");
 		// 	return;
@@ -148,12 +217,12 @@ function modalsearchclick() {
 		// 		// error handling code here
 		// 		return;
 		// 	}
-			yelpSearch(searchTerm, searchLocation);
+			
 
 
 		// }
 
-		}
+}
 
 
 
@@ -334,7 +403,7 @@ function yelpSearch (searchTerm, searchLocation) {
 
 	var parameterMap = OAuth.getParameterMap(message.parameters);
 	parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature)
-	console.log(parameterMap);
+	console.log("parameters: ", parameterMap);
 
 	//get call to yelp search api
 	$.ajax({
