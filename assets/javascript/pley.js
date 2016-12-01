@@ -22,7 +22,7 @@ var recentSearches = [];
 
   var db = firebase.database();
 
- //Listening for changes in 'searches' node in firebase
+ //Listening for changes in 'searches' node in firebase so display recent searches to user
   db.ref('searches').on('value', function(snapshot) {
   		$('#recent-searches').empty();
   		recentSearches = [];
@@ -64,7 +64,7 @@ $('#page-search-button').on('click', pagesearchclick);
 //Search Button in modal
 $('#search-button-modal').on('click', modalsearchclick);
 
-//Add click event to recent searches
+//Add click event to recent searches divs that trigger a new yelp search when clicked
 $(document).on('click', '.searches', function(){
  	newsearch = $(this).text();
  	console.log("newsearch: " + newsearch);
@@ -77,7 +77,7 @@ $(document).on('click', '.searches', function(){
 
 //Forms==============================
 
-//Autoselection value in location input field on click
+//Auto select the entire value in following input fields on click
  $('#page-location-input').click( function highlight() {
     $(this).select();
   });
@@ -124,7 +124,7 @@ function modalsearchclick() {
 
 		var testFind = $('#modal-find-input').val().trim();
 		var testNear = $('#modal-near-input').val().trim();
-		var letters = /^[a-z0-9 ]+$/i;
+		var letters = /^[a-z0-9, ]+$/i;
 
 		$('#modal-find-error-msg').html("");
 		$('#modal-near-error-msg').html("");
@@ -237,7 +237,7 @@ function modalsearchclick() {
 function pagesearchclick() {
 
 	$('#form-error-msg').html("");
-	var letters = /^[a-z0-9_ ]+$/i;
+	var letters = /^[a-z0-9, ]+$/i;
 
 	//Input validation
 	if ($('#modal-find-input').val().trim() === "" || $('#page-location-input').val().trim() === "") {
@@ -341,28 +341,36 @@ function resultBuilder(yelpObject) {
 	var bounds = new google.maps.LatLngBounds();
 	var infowindow = new google.maps.InfoWindow();  
 
+	//loop through each item in locationGeo array
    locationsGeo.forEach(function(loc, i){
   
+  		//create a info windown for each marker and insert content 
     	var infowindow = new google.maps.InfoWindow({
           content: loc.content
         });
-     
-    	var marker = new google.maps.Marker({position: loc.latlng, map:map, title:loc.name});
 
+     	//create a map marker for each location with a hover over title
+    	var marker = new google.maps.Marker({
+    		position: loc.latlng, 
+    		map:map, 
+    		title:loc.name});
+
+    	//insert the lat/long of each marker into the bounds array
 	    bounds.extend(marker.position);
 
+	    //add click event listener for each map marker that opens up an info window
         marker.addListener('click', function() {
           infowindow.open(map, marker);
         });
        
      });
-	//now fit the map to the newly inclusive bounds
+	//resize the map to fit all of the lat/long coordinates inside bounds array
 	map.fitBounds(bounds);      
 	
 }
 
 
-//Function to trigger a GET Request to Yelp Search API using zipcode entered from user===========
+//Function to trigger a GET Request to Yelp Search API using search term and location entered from user===========
 function yelpSearch (searchTerm, searchLocation) {
 
 	var auth = {
@@ -372,10 +380,6 @@ function yelpSearch (searchTerm, searchLocation) {
 		accessTokenSecret : "-e1Vqkn-H-JJH3CDUdlAiEP4EYc",
 		serviceProvider : {signatureMethod : "HMAC-SHA1"}
 		};
-
-	// var terms = $('#modal-find-input').val().trim();
-	// console.log("This is term: " + terms);
-	// var near = $('#page-location-input').val().trim();
 
 	var accessor = {
 			consumerSecret : auth.consumerSecret,
@@ -417,22 +421,21 @@ function yelpSearch (searchTerm, searchLocation) {
 		//If the request is successful
 		.done(function(data) {
 
-			console.log("this is data inside request: ", data);
+			//Call the resultBuilder function and pass in the Object passed back from Yelp
 			resultBuilder(data);
 
 		})
 
-		//if the request fails append error message with error code.
+		//if the request fails append custom error message with error code.
 		.fail(function(data){
 
-			console.log("oops : ", data);
 			var errMsg = $('<div>').addClass('row').append(
 				
 				"<div class='col-xs-12' id='errorMsg'>" + 
 				"<span id=errorCode>Error message: " + 
 				data.status + 
 				"</span>." + "<br><br>" + 
-				"Sorry, but we didn't understand the location you entered. We accept locations in the following forms: "+ 
+				"Sorry, but Pley didn't understand the location you entered. We accept locations in the following forms: "+ 
 				"<br><br>" + 
 				" - 1200 N. Michigan Ave, Chicago, IL" + "<br>" + 
 				" - Chicago, IL" + "<br>" + 
@@ -440,7 +443,7 @@ function yelpSearch (searchTerm, searchLocation) {
 				" - 60640" + "<br><br>" + 
 				"Also, it's possible we don't have a listing for \"" + searchLocation + "\". In that case, you should try adding a zip, or try a larger nearby city." +"</div>"); 
 
-			//Append Search results to the DOM
+			//Append error message to the DOM
 			$('#search-results').append(errMsg);
 
 		})
@@ -452,6 +455,7 @@ function yelpSearch (searchTerm, searchLocation) {
 };
 
 
+//function to initialize google map centered on the U.S
 function initMap() {
         var mapDiv = document.getElementById('map'); 
         var mapOptions = {
@@ -463,30 +467,29 @@ function initMap() {
         
 }
 
+//function to call google maps geocoding API and pass in lat/long of the location returned from Yelp response in order to let the user know what location is specifically being searched 
 function addressLookup(lat, long) {
 
 		var latlng = lat + "," + long;
-		console.log("this is latlng in addressLookup: " + latlng);
 		var queryURL = "https:/maps.googleapis.com/maps/api/geocode/json?latlng=" + latlng 
 						 + "&key=AIzaSyBbmAefrpT0YSqgufXAyKg8Stl1CmxqZpI";
-		console.log("query url: " + queryURL);
 		$.ajax({
 				url: queryURL, 
 				method: 'GET'
+
+			//If geocoding API returns a success response, manipulate the formatted address from response
 			}).done(function(response) {
-			console.log("this is response from addressLookUp: ", response);
-			var formatted_address = response.results[0].formatted_address;
-			var splitAddress = formatted_address.split(",");
-			var rawDisplayAddress = splitAddress[1] + "," + splitAddress[2];
-			displayAddress = rawDisplayAddress.trim();
-			console.log(displayAddress);
+			
+				var formatted_address = response.results[0].formatted_address;
+				var splitAddress = formatted_address.split(",");
+				var rawDisplayAddress = splitAddress[1] + "," + splitAddress[2];
+				displayAddress = rawDisplayAddress.trim();
 
-			$('#search-title').html("Best " +
-						searchTerm + " in " + displayAddress + 
-						" - " + 
-						numResults + " Results");
-
-			return displayAddress;
+				//display formatted address to user on DOM
+				$('#search-title').html("Best " +
+							searchTerm + " in " + displayAddress + 
+							" - " + 
+							numResults + " Results");
 			
 		});
 
@@ -501,9 +504,9 @@ $.fn.stars = function() {
         // Make sure that the value is in 0 - 5 range, multiply to get width
         val = Math.round(val * 2) / 2; /* To round to nearest half */
         var size = Math.max(0, (Math.min(5, val))) * 16;
-        // Create stars holder
+        // create a span with the width equal to the star rating
         var $span = $('<span />').width(size);
-        // Replace the numerical value with stars
+        // change the html to a span instead of the numerical rating (css sprites will handle showing the stars)
         $(this).html($span);
     });
 }
